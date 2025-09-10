@@ -1,1 +1,2 @@
-db/sqlc/
+db/sqlc/*.sql.go
+db/sqlc/db.go
