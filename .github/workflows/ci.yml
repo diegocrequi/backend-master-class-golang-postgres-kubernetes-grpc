@@ -23,7 +23,7 @@ jobs:
         go-version: '1.24.6'
 
     - name: Install dependencies
-      run: sudo snap install -y sqlc
+      run: sudo snap install sqlc
 
     - name: Generate code from sqlc
       run: make sqlc
