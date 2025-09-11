@@ -14,6 +14,18 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: simple_bank
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
     - uses: actions/checkout@v4
 
@@ -22,11 +34,17 @@ jobs:
       with:
         go-version: '1.24.6'
 
-    - name: Install dependencies
+    - name: Install golang-migrate dependency
+      run: curl -L https://github.com/golang-migrate/migrate/releases/download/4.19.0/migrate.linux-arm64.tar.gz | tar xvz
+
+    - name: Install sqlc dependency
       run: sudo snap install sqlc
 
     - name: Generate code from sqlc
       run: make sqlc
+
+    - name: Run db migrations
+      run: make migrateup
 
     - name: Test
       run: make test
