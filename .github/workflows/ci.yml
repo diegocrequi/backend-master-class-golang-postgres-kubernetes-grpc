@@ -34,11 +34,12 @@ jobs:
       with:
         go-version: '1.24.6'
 
-    - name: Install golang-migrate dependency
-      run: curl -L https://github.com/golang-migrate/migrate/releases/download/4.19.0/migrate.linux-arm64.tar.gz | tar xvz
-
-    - name: Install sqlc dependency
-      run: sudo snap install sqlc
+    - name: Install dependencies
+      run: |
+        sudo snap install sqlc
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.19.0/migrate.linux-amd64.tar.gz | tar xvz 
+        sudo mv migrate /usr/bin/
+        which migrate
 
     - name: Generate code from sqlc
       run: make sqlc
